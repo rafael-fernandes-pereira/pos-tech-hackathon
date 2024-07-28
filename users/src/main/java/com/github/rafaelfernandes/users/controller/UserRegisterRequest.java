@@ -2,13 +2,11 @@ package com.github.rafaelfernandes.users.controller;
 
 import java.util.Objects;
 
+import com.github.rafaelfernandes.users.entity.ContactEntity;
 import com.github.rafaelfernandes.users.enums.State;
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.security.core.userdetails.User;
 
 import com.github.rafaelfernandes.users.entity.UserEntity;
-import com.github.rafaelfernandes.users.enums.UserRoles;
 
 
 public record UserRegisterRequest(
@@ -21,35 +19,51 @@ public record UserRegisterRequest(
     @Size(min = 3, message = "Nome deve ter pelo menos 3 caracteres")
     String nome,
     
-    @NotNull(message = "Email is required")
-    @Email(message = "Email is invalid")
+    @NotNull(message = "Email deve ser preenchido")
+    @Email(message = "Email deve ser válido")
     String email,
-    
-    @NotNull(message = "Password is required")
-    @Size(min = 10, message = "Password must be at least 10 characters long")
-    String senha,
 
-    @NotEmpty(message = "O campo rua deve estar preenchido")
-    @Size( min = 10, max = 150, message = "O campo rua deve ter no máximo 150 caracteres")
+    @NotNull(message = "Telefone deve ser preenchido")
+    @Size(min = 11, max = 11, message = "Telefone deve conter 11 caracteres")
+    String telefone,
+
+    @NotEmpty(message = "Rua deve ser preenchida")
+    @Size( min = 10, max = 150, message = "Rua deve ter no máximo 150 caracteres")
     String rua,
 
-    @NotEmpty(message = "O campo address.city deve estar preenchido")
-    @Length( min = 3, max = 60, message = "O campo address.city deve ter no máximo 60 caracteres")
-    String city,
+    @NotEmpty(message = "Cidade deve ser preenchida")
+    @Size( min = 3, max = 60, message = "Cidade deve ter no minimo 3 e no máximo 60 caracteres")
+    String cidade,
 
-    @NotNull(message = "O campo address.state deve estar preenchido")
-    State state
-    
-    UserRoles role
+    @NotNull(message = "Estado deve ser preenchido")
+    State estado,
+
+    @NotNull(message = "CEP deve ser preenchido")
+    @Size(min = 9, max = 9, message = "CEP deve conter 8 caracteres")
+    String cep,
+
+    @NotNull(message = "País deve ser preenchido")
+    @Size(min = 3, max = 60, message = "País deve ter no minimo 3 e no máximo 60 caracteres")
+    String pais
 
 ) {
 
     public UserEntity toEntity(){
+
+        ContactEntity contactEntity = ContactEntity.builder()
+                .phone(telefone)
+                .street(rua)
+                .city(cidade)
+                .state(estado)
+                .zipcode(cep)
+                .country(pais)
+            .build();
+
         return UserEntity.builder()
-            .name(name)
-            .password(password)
+            .name(nome)
             .email(email)
-            .userRoles(Objects.nonNull(role) ? role : UserRoles.CUSTOMER)
+            .document(cpf)
+            .contact(contactEntity)
             .build();
     }
 

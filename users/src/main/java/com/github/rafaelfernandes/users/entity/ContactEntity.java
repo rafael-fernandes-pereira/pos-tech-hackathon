@@ -26,6 +26,7 @@ public class ContactEntity {
     private String street;
     private String city;
     private State state;
+    private String country;
 
     @OneToOne(mappedBy = "contact")
     private UserEntity user;

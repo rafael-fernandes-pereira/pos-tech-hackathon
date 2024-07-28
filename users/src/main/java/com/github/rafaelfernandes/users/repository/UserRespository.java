@@ -11,6 +11,10 @@ import com.github.rafaelfernandes.users.entity.UserEntity;
 @Repository
 public interface UserRespository extends JpaRepository<UserEntity, UUID>{
 
+    Optional<UserEntity> findFirstByEmailOrDocument(String email, String document);
+
     Optional<UserEntity> findFirstByEmail(String email);
+
+
 
 }

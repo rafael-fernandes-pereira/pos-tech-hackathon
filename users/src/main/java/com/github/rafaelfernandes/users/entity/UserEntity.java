@@ -21,13 +21,11 @@ public class UserEntity {
 
     private String name;
 
+    @Column(unique = true, nullable = false)
     private String email;
 
-    private String password;
-
+    @Column(unique = true, nullable = false)
     private String document;
-
-    private UserRoles userRoles;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id", referencedColumnName = "id")
