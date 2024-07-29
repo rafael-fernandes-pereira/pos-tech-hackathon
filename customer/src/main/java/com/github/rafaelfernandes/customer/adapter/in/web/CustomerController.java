@@ -6,6 +6,14 @@ import com.github.rafaelfernandes.customer.common.annotations.WebAdapter;
 import com.github.rafaelfernandes.customer.adapter.in.web.response.CustomerDataResponse;
 import com.github.rafaelfernandes.customer.adapter.in.web.response.CustomerIdResponse;
 import com.github.rafaelfernandes.customer.adapter.in.web.request.CustomerRequest;
+import com.github.rafaelfernandes.customer.common.response.ResponseError;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +27,33 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/cliente")
 @AllArgsConstructor
+@Tag(name = "01 - Customer", description = "Customer Endpoint")
 public class CustomerController {
 
     private final ManageCustomerUseCase useCase;
 
+    @Operation(summary = "Create a Customer")
+    @ApiResponses(value = {
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CustomerIdResponse.class)
+            )),
+            @ApiResponse(description = "Business and Internal problems", responseCode = "500", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Business and Internal problems\",\"status\":500}")
+            )),
+            @ApiResponse(description = "Authenticate error", responseCode = "401", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Authenticate error\",\"status\":401}")
+            ))
+    })
     @PostMapping(
             path = "/",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CustomerIdResponse> register(@RequestBody CustomerRequest request){
+    ResponseEntity<CustomerIdResponse> register(@Parameter @RequestBody CustomerRequest request){
 
         var contactModel = new Customer.Contact(
                 request.telefone(),
@@ -49,9 +75,26 @@ public class CustomerController {
 
         var response = new CustomerIdResponse(UUID.fromString(newUser.id()));
 
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(response);
+        return ResponseEntity.status(HttpStatus.OK.value()).body(response);
     }
 
+    @Operation(summary = "Find a Customer by Id")
+    @ApiResponses(value = {
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CustomerDataResponse.class)
+            )),
+            @ApiResponse(description = "Business and Internal problems", responseCode = "500", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Business and Internal problems\",\"status\":500}")
+            )),
+            @ApiResponse(description = "Authenticate error", responseCode = "401", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Authenticate error\",\"status\":401}")
+            ))
+    })
     @GetMapping(
             path = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,

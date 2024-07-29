@@ -1,12 +1,11 @@
 package com.github.rafaelfernandes.customer.adapter.in.web.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.UUID;
 
 public record CustomerIdResponse(
-        UUID id_cliente
-) {
 
-        public static CustomerIdResponse fromEntity(UUID id){
-            return new CustomerIdResponse(id);
-        }
-}
+        @Schema(implementation = UUID.class)
+        UUID id_cliente
+) {}

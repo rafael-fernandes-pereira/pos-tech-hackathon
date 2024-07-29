@@ -1,24 +1,36 @@
 package com.github.rafaelfernandes.customer.adapter.in.web.request;
 
 
+import com.github.rafaelfernandes.customer.common.enums.State;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public record CustomerRequest(
 
-    String cpf,
+        @Schema(minimum = "11", maximum = "14")
+        String cpf,
 
-    String nome,
-    
-    String email,
+        @Schema(minimum = "3")
+        String nome,
 
-    String telefone,
+        @Schema(nullable = false)
+        String email,
 
-    String rua,
+        @Schema(minimum = "11", maximum = "11")
+        String telefone,
 
-    String cidade,
+        @Schema(minimum = "10", maximum = "150")
+        String rua,
 
-    String estado,
+        @Schema(minimum = "3", maximum = "60")
+        String cidade,
 
-    String cep,
+        @Schema(implementation = State.class)
+        String estado,
 
-    String pais
+        @Schema(minimum = "9", maximum = "9")
+        String cep,
+
+        @Schema(minimum = "3", maximum = "60")
+        String pais
 
 ) {}
