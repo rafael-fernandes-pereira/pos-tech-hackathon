@@ -12,6 +12,18 @@ services:
     ports:
       - "5432:5432"
 
+  customer-service:
+    build: ./customer
+    container_name: customer_service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - users-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://users-db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+
 
 
 
