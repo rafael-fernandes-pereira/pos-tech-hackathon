@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  users-db:
+  customer-db:
     image: postgres:latest
     container_name: postgres_db
     environment:
@@ -18,7 +18,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - users-db
+      - customer-db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://users-db:5432/mydatabase
       SPRING_DATASOURCE_USERNAME: myuser

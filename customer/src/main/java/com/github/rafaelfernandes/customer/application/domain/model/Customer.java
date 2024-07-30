@@ -1,6 +1,8 @@
 package com.github.rafaelfernandes.customer.application.domain.model;
 
 import com.github.rafaelfernandes.customer.common.enums.State;
+import com.github.rafaelfernandes.customer.common.validation.ValidationCep;
+import com.github.rafaelfernandes.customer.common.validation.ValidationContactNumber;
 import com.github.rafaelfernandes.customer.common.validation.ValueOfEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -54,11 +56,12 @@ public class Customer {
     public static class Contact {
 
         @NotNull(message = "Telefone deve ser preenchido")
-        @Size(min = 11, max = 11, message = "Telefone deve conter 11 caracteres")
+        @Size(min = 17, max = 17, message = "Telefone deve conter {min} caracteres")
+        @ValidationContactNumber(message = "Telefone inválido. O telefone deve seguir o padrão +XX XX XXXXX-XXXX")
         String telefone;
 
         @NotEmpty(message = "Rua deve ser preenchida")
-        @Size( min = 10, max = 150, message = "Rua deve ter no minimo 10 e máximo 150 caracteres")
+        @Size( min = 10, max = 150, message = "Rua deve ter no minimo {min} e máximo {max} caracteres")
         String rua;
 
         @NotEmpty(message = "Cidade deve ser preenchida")
@@ -71,6 +74,7 @@ public class Customer {
 
         @NotEmpty(message = "CEP deve ser preenchido")
         @Size(min = 9, max = 9, message = "CEP deve conter 8 caracteres")
+        @ValidationCep(message = "CEP inválido. O CEP deve seguir o padrão XXXXX-XXX")
         String cep;
 
         @NotNull(message = "País deve ser preenchido")

@@ -1,20 +1,21 @@
 package com.github.rafaelfernandes.customer.common.validation;
 
+import com.github.rafaelfernandes.customer.common.enums.State;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class ValueOfEnumValidator  implements ConstraintValidator<ValueOfEnum, CharSequence> {
+public class ValueOfStateValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
     private List<String> acceptedValues;
 
     @Override
     public void initialize(ValueOfEnum annotation) {
-        acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
-                .map(Enum::name)
-                .collect(Collectors.toList());
+        acceptedValues = Arrays.stream(State.values())
+                .map(State::getNomeCompleto)
+                .map(String::toLowerCase)
+                .toList();
     }
 
     @Override
@@ -23,6 +24,6 @@ public class ValueOfEnumValidator  implements ConstraintValidator<ValueOfEnum, C
             return true;
         }
 
-        return acceptedValues.contains(value.toString());
+        return acceptedValues.contains(value.toString().toLowerCase());
     }
 }
