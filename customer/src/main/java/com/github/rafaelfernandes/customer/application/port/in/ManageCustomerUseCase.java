@@ -8,4 +8,6 @@ public interface ManageCustomerUseCase {
 
     Customer findById(Customer.CustomerId customerId);
 
+    Customer findByCpf(String cpf);
+
 }

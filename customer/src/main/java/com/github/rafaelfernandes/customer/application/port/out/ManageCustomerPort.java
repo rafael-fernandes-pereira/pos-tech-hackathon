@@ -8,7 +8,7 @@ public interface ManageCustomerPort {
 
     Boolean existsByEmail(String email);
 
-    Boolean existsByCpf(String cpf);
+    Optional<Customer> findByCpf(String cpf);
 
     Optional<Customer> findById(Customer.CustomerId customerId);
 

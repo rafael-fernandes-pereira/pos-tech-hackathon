@@ -20,7 +20,7 @@ public class ManageCustomerService implements ManageCustomerUseCase {
     @Transactional
     public Customer.CustomerId createCustomer(Customer customer) {
 
-        if (Boolean.TRUE.equals(manageCustomerPort.existsByCpf(customer.getCpf()))) throw new CustomerExistsCpfException();
+        if (manageCustomerPort.findByCpf(customer.getCpf()).isPresent()) throw new CustomerExistsCpfException();
 
         if (Boolean.TRUE.equals(manageCustomerPort.existsByEmail(customer.getEmail()))) throw new CustomerExistsEmailException();
 
@@ -35,5 +35,12 @@ public class ManageCustomerService implements ManageCustomerUseCase {
 
         return manageCustomerPort.findById(customerId)
                 .orElseThrow(CustomerNotFoundException::new);
+    }
+
+    @Override
+    public Customer findByCpf(String cpf) {
+        return manageCustomerPort.findByCpf(cpf)
+                .orElseThrow(CustomerNotFoundException::new);
+
     }
 }

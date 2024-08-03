@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
 
@@ -18,6 +18,11 @@ services:
     ports:
       - "5432:5432"
 
+  credit-card-db:
+    <<: *database
+    container_name: credit_card_db
+    ports:
+      - "5434:5432"
 
   customer-service:
     build: ./customer

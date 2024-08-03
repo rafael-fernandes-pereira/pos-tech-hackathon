@@ -5,6 +5,7 @@ import com.github.rafaelfernandes.customer.application.port.out.ManageCustomerPo
 import com.github.rafaelfernandes.customer.common.annotations.PersistenceAdapter;
 import com.github.rafaelfernandes.customer.common.exception.CustomerExistsCpfException;
 import com.github.rafaelfernandes.customer.common.exception.CustomerExistsEmailException;
+import com.github.rafaelfernandes.customer.common.exception.CustomerNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -21,10 +22,6 @@ public class CustomerPersistenceAdapter implements ManageCustomerPort {
     @Override
     @Transactional
     public Customer save(Customer customer) {
-
-        if (customerRepository.existsByEmail(customer.getEmail())) throw new CustomerExistsEmailException();
-
-        if (customerRepository.existsByDocument(customer.getCpf())) throw new CustomerExistsCpfException();
 
         var customerJpaEntity = customerMapper.toCreateJpaEntity(customer);
 
@@ -55,7 +52,13 @@ public class CustomerPersistenceAdapter implements ManageCustomerPort {
     }
 
     @Override
-    public Boolean existsByCpf(String cpf) {
-        return customerRepository.existsByDocument(cpf);
+    public Optional<Customer> findByCpf(String cpf) {
+
+        var customer = customerRepository.findByDocument(cpf);
+
+        if (customer.isEmpty()) return Optional.empty();
+
+        return Optional.of(customerMapper.toDomain(customer.get()));
+
     }
 }
