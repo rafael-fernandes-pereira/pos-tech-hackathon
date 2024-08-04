@@ -6,6 +6,6 @@ public interface ManageCreditCardUseCase {
 
     CreditCard.CreditCardId create(CreditCard customer);
 
-    CreditCard findByCreditCard(String cpf, String number);
+    CreditCard findCreditCardByCpfAndNumber(String cpf, String number);
 
 }

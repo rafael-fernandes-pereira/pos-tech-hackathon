@@ -27,7 +27,7 @@ public class ManageCreditCardService implements ManageCreditCardUseCase {
 
         var creditCardExists = manageCreditCardPort.existsByCpfAndNumber(customer.getCpf(), customer.getNumero());
 
-        if (creditCardExists) throw new NumberCreditCardForCpfExistsException();
+        if (Boolean.TRUE.equals(creditCardExists)) throw new NumberCreditCardForCpfExistsException();
 
         var size = manageCreditCardPort.sizeByCPF(customer.getCpf());
 
@@ -39,7 +39,14 @@ public class ManageCreditCardService implements ManageCreditCardUseCase {
     }
 
     @Override
-    public CreditCard findByCreditCard(String cpf, String number) {
-        return null;
+    public CreditCard findCreditCardByCpfAndNumber(String cpf, String number) {
+
+        var creditCard = manageCreditCardPort.findCreditCardByCpfAndNumber(cpf, number);
+
+        if (creditCard.isEmpty()) throw new CustomerNotFoundException();
+
+        return creditCard.get();
+
+
     }
 }

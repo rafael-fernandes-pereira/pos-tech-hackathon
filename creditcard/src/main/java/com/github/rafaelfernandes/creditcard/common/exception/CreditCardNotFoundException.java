@@ -1,12 +1,12 @@
 package com.github.rafaelfernandes.creditcard.common.exception;
 
-public class CustomerNotFoundException extends RuntimeException {
+public class CreditCardNotFoundException extends RuntimeException {
 
-    private static final String MESSAGE = "Cliente não encontrado";
+    private static final String MESSAGE = "Cartão de crédito não encontrado";
 
     private static Integer STATUS = 500;
 
-    public CustomerNotFoundException() {
+    public CreditCardNotFoundException() {
         super(MESSAGE);
     }
 

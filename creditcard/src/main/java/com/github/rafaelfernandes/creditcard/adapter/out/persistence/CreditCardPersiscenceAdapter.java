@@ -5,6 +5,8 @@ import com.github.rafaelfernandes.creditcard.common.annotations.PersistenceAdapt
 import com.github.rafaelfernandes.creditcard.port.out.ManageCreditCardPort;
 import lombok.AllArgsConstructor;
 
+import java.util.Optional;
+
 @PersistenceAdapter
 @AllArgsConstructor
 public class CreditCardPersiscenceAdapter implements ManageCreditCardPort {
@@ -30,6 +32,17 @@ public class CreditCardPersiscenceAdapter implements ManageCreditCardPort {
         var saved = creditCardRepository.save(creditCardJpaEntity);
 
         return creditCardMapper.toDomain(saved);
+
+    }
+
+    @Override
+    public Optional<CreditCard> findCreditCardByCpfAndNumber(String cpf, String number) {
+        var creditCardJpaEntity = creditCardRepository.findByDocumentAndNumber(cpf, number);
+
+        if (creditCardJpaEntity == null) return Optional.empty();
+
+        return Optional.of(creditCardMapper.toDomain(creditCardJpaEntity));
+
 
     }
 }

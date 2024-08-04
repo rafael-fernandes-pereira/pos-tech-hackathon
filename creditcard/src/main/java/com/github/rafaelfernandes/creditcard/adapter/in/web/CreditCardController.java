@@ -1,6 +1,7 @@
 package com.github.rafaelfernandes.creditcard.adapter.in.web;
 
 import com.github.rafaelfernandes.creditcard.adapter.in.web.request.CreditCardRequest;
+import com.github.rafaelfernandes.creditcard.adapter.in.web.response.CreditCardDataResponse;
 import com.github.rafaelfernandes.creditcard.adapter.in.web.response.CreditCardIdResponse;
 import com.github.rafaelfernandes.creditcard.application.model.CreditCard;
 import com.github.rafaelfernandes.creditcard.common.annotations.WebAdapter;
@@ -74,19 +75,25 @@ public class CreditCardController {
         return ResponseEntity.status(HttpStatus.OK.value()).body(response);
     }
 
-//    @Operation(summary = "Get a Credit Card by Cpf And Number")
-//    @GetMapping(
-//            path = "/",
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    ResponseEntity<CreditCardIdResponse> getCreditCard(@RequestParam("cpf") String cpf, @RequestParam("numero") String numero){
-//
-//        var creditCard = useCase.findByCreditCard(cpf, numero);
-//
-//        var response = new CreditCardIdResponse(UUID.fromString(creditCard.id()));
-//
-//        return ResponseEntity.status(HttpStatus.OK.value()).body(response);
-//
-//
-//    }
+    @Operation(summary = "Get a Credit Card by Cpf And Number")
+    @GetMapping(
+            path = "/",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<CreditCardDataResponse> getCreditCard(@RequestParam("cpf") String cpf, @RequestParam("numero") String numero){
+
+        var creditCard = useCase.findCreditCardByCpfAndNumber(cpf, numero);
+
+        var response = new CreditCardDataResponse(
+                creditCard.getCpf(),
+                creditCard.getNumero(),
+                creditCard.getDataValidade(),
+                creditCard.getCodigoSeguranca(),
+                creditCard.getLimite()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body(response);
+
+
+    }
 
 }

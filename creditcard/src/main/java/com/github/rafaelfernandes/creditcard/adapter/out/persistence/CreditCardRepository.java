@@ -8,4 +8,6 @@ public interface CreditCardRepository extends JpaRepository<CreditCardJpaEntity,
     Integer countByDocument(String document);
 
     Boolean existsByDocumentAndNumber(String cpf, String number);
+
+    CreditCardJpaEntity findByDocumentAndNumber(String cpf, String number);
 }
