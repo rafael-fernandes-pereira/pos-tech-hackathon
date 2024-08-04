@@ -17,10 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -76,5 +73,20 @@ public class CreditCardController {
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(response);
     }
+
+//    @Operation(summary = "Get a Credit Card by Cpf And Number")
+//    @GetMapping(
+//            path = "/",
+//            produces = MediaType.APPLICATION_JSON_VALUE)
+//    ResponseEntity<CreditCardIdResponse> getCreditCard(@RequestParam("cpf") String cpf, @RequestParam("numero") String numero){
+//
+//        var creditCard = useCase.findByCreditCard(cpf, numero);
+//
+//        var response = new CreditCardIdResponse(UUID.fromString(creditCard.id()));
+//
+//        return ResponseEntity.status(HttpStatus.OK.value()).body(response);
+//
+//
+//    }
 
 }

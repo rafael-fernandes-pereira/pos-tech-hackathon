@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(
         name = "tbl_credit_card",
         indexes = {
-                @Index(name = "idx_credit_card_cpf", columnList = "cpf")
+                @Index(name = "idx_credit_card_document", columnList = "document")
         }
 )
 public class CreditCardJpaEntity {
@@ -26,7 +26,7 @@ public class CreditCardJpaEntity {
     @GeneratedValue(generator = "UUIDGenerator")
     private UUID id;
 
-    private String cpf;
+    private String document;
 
     private String number;
 

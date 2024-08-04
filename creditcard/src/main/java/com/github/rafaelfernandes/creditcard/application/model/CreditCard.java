@@ -34,7 +34,7 @@ public class CreditCard {
 
     @NotNull(message = "Data de validade do cartão deve ser preenchida")
     @Size(min = 5, max = 5, message = "Data de validade do cartão deve conter 5 caracteres")
-    @CreditCardExpirationDate(message = "Data de validade do cartão inválida")
+    @CreditCardExpirationDate()
     private String dataValidade;
 
     @NotNull(message = "Código de segurança do cartão deve ser preenchido")

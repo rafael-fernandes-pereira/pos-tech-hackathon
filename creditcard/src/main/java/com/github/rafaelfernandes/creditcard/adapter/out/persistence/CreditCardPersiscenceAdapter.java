@@ -14,12 +14,12 @@ public class CreditCardPersiscenceAdapter implements ManageCreditCardPort {
 
     @Override
     public Integer sizeByCPF(String cpf) {
-        return creditCardRepository.countByCpf(cpf);
+        return creditCardRepository.countByDocument(cpf);
     }
 
     @Override
     public Boolean existsByCpfAndNumber(String cpf, String number) {
-        return creditCardRepository.existsByCpfAndNumber(cpf, number);
+        return creditCardRepository.existsByDocumentAndNumber(cpf, number);
     }
 
     @Override

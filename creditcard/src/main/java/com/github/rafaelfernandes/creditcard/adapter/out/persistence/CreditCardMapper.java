@@ -8,7 +8,7 @@ public class CreditCardMapper {
 
     public CreditCardJpaEntity toJpaEntity(CreditCard creditCard) {
         return CreditCardJpaEntity.builder()
-                .cpf(creditCard.getCpf())
+                .document(creditCard.getCpf())
                 .expirationDate(creditCard.getDataValidade())
                 .number(creditCard.getNumero())
                 .cvv(creditCard.getCodigoSeguranca())
@@ -19,7 +19,7 @@ public class CreditCardMapper {
     public CreditCard toDomain(CreditCardJpaEntity creditCardJpaEntity) {
         return CreditCard.of(
                 creditCardJpaEntity.getId().toString(),
-                creditCardJpaEntity.getCpf(),
+                creditCardJpaEntity.getDocument(),
                 creditCardJpaEntity.getNumber(),
                 creditCardJpaEntity.getExpirationDate(),
                 creditCardJpaEntity.getCvv(),

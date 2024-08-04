@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface CreditCardRepository extends JpaRepository<CreditCardJpaEntity, UUID> {
-    Integer countByCpf(String cpf);
+    Integer countByDocument(String document);
 
-    Boolean existsByCpfAndNumber(String cpf, String number);
+    Boolean existsByDocumentAndNumber(String cpf, String number);
 }
