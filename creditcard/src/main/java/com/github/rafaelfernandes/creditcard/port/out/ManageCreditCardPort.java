@@ -2,6 +2,7 @@ package com.github.rafaelfernandes.creditcard.port.out;
 
 import com.github.rafaelfernandes.creditcard.application.model.CreditCard;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface ManageCreditCardPort {
@@ -12,5 +13,7 @@ public interface ManageCreditCardPort {
     CreditCard save(CreditCard creditCard);
 
     Optional<CreditCard> findCreditCardByCpfAndNumber(String cpf, String number);
+
+    Optional<CreditCard> updateLimit(String cpf, String number, BigDecimal limit);
 
 }

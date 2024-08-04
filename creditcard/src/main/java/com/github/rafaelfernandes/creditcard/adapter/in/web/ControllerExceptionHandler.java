@@ -1,9 +1,6 @@
 package com.github.rafaelfernandes.creditcard.adapter.in.web;
 
-import com.github.rafaelfernandes.creditcard.common.exception.CustomerNotFoundException;
-import com.github.rafaelfernandes.creditcard.common.exception.NumberCreditCardByCpfException;
-import com.github.rafaelfernandes.creditcard.common.exception.NumberCreditCardForCpfExistsException;
-import com.github.rafaelfernandes.creditcard.common.exception.ResponseError;
+import com.github.rafaelfernandes.creditcard.common.exception.*;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +33,13 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler({NumberCreditCardForCpfExistsException.class})
     public ResponseEntity<ResponseError> errorValidation(NumberCreditCardForCpfExistsException exception){
+        return ResponseEntity
+                .status(HttpStatus.valueOf(exception.getStatus()))
+                .body(new ResponseError(exception.getMessage(), exception.getStatus()));
+    }
+
+    @ExceptionHandler({CreditCardNotFoundException.class})
+    public ResponseEntity<ResponseError> errorValidation(CreditCardNotFoundException exception){
         return ResponseEntity
                 .status(HttpStatus.valueOf(exception.getStatus()))
                 .body(new ResponseError(exception.getMessage(), exception.getStatus()));

@@ -1,6 +1,7 @@
 package com.github.rafaelfernandes.creditcard.adapter.in.web;
 
 import com.github.rafaelfernandes.creditcard.adapter.in.web.request.CreditCardRequest;
+import com.github.rafaelfernandes.creditcard.adapter.in.web.request.CreditCardUpdateLimitRequest;
 import com.github.rafaelfernandes.creditcard.adapter.in.web.response.CreditCardDataResponse;
 import com.github.rafaelfernandes.creditcard.adapter.in.web.response.CreditCardIdResponse;
 import com.github.rafaelfernandes.creditcard.application.model.CreditCard;
@@ -92,8 +93,18 @@ public class CreditCardController {
         );
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(response);
+    }
 
+    @PutMapping(
+            path = "/limite",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseEntity<Boolean> updateLimit(@RequestBody CreditCardUpdateLimitRequest request){
 
+        var updated = useCase.updateLimit(request.cpf(), request.numero(), request.compra());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body(updated);
     }
 
 }

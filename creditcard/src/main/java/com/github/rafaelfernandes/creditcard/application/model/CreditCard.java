@@ -11,6 +11,7 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
 
@@ -44,9 +45,9 @@ public class CreditCard {
 
     @NotNull(message = "Limite do cartão deve ser preenchido")
     @Positive(message = "Limite do cartão deve ser positivo")
-    private BigInteger limite;
+    private BigDecimal limite;
 
-    public static CreditCard of(String creditCardId, String cpf, String number, String expirationDate, String cvv, BigInteger limit) {
+    public static CreditCard of(String creditCardId, String cpf, String number, String expirationDate, String cvv, BigDecimal limit) {
         return new CreditCard(new CreditCardId(creditCardId), cpf, number, expirationDate, cvv, limit);
     }
 
@@ -63,7 +64,7 @@ public class CreditCard {
         }
     }
 
-    public CreditCard(String cpf, String numero, String dataValidade, String codigoSeguranca, BigInteger limite) {
+    public CreditCard(String cpf, String numero, String dataValidade, String codigoSeguranca, BigDecimal limite) {
         this.cpf = cpf;
         this.numero = numero;
         this.dataValidade = dataValidade;

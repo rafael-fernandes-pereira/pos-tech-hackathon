@@ -1,13 +1,10 @@
 package com.github.rafaelfernandes.creditcard.adapter.in.web.request;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
-public record CreditCardRequest(
+public record CreditCardUpdateLimitRequest(
         String cpf,
         String numero,
-        String data_validade,
-        String cvv,
-        BigDecimal limite
+        BigDecimal compra
 ) {
 }

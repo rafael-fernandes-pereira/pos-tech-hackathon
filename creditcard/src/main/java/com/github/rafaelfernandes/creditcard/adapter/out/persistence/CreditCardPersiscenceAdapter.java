@@ -5,6 +5,7 @@ import com.github.rafaelfernandes.creditcard.common.annotations.PersistenceAdapt
 import com.github.rafaelfernandes.creditcard.port.out.ManageCreditCardPort;
 import lombok.AllArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @PersistenceAdapter
@@ -43,6 +44,21 @@ public class CreditCardPersiscenceAdapter implements ManageCreditCardPort {
 
         return Optional.of(creditCardMapper.toDomain(creditCardJpaEntity));
 
+
+    }
+
+    @Override
+    public Optional<CreditCard> updateLimit(String cpf, String number, BigDecimal limit) {
+
+        var creditCardJpaEntity = creditCardRepository.findByDocumentAndNumber(cpf, number);
+
+        if (creditCardJpaEntity == null) return Optional.empty();
+
+        creditCardJpaEntity.setLimitValue(limit);
+
+        var updated = creditCardRepository.save(creditCardJpaEntity);
+
+        return Optional.of(creditCardMapper.toDomain(updated));
 
     }
 }

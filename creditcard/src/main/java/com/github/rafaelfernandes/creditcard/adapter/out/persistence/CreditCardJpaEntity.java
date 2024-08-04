@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
 
@@ -34,6 +35,6 @@ public class CreditCardJpaEntity {
 
     private String expirationDate;
 
-    private BigInteger limitValue;
+    private BigDecimal limitValue;
 
 }
