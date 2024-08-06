@@ -41,7 +41,7 @@ public class CreditCardController {
             @ApiResponse(description = "Number max of credit card exceded", responseCode = "403", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ResponseError.class),
-                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Business and Internal problems\",\"status\":500}")
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Business and Internal problems\",\"status\":403}")
             )),
             @ApiResponse(description = "Business and Internal problems", responseCode = "500", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -77,6 +77,22 @@ public class CreditCardController {
     }
 
     @Operation(summary = "Get a Credit Card by Cpf And Number")
+    @ApiResponses(value = {
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CreditCardDataResponse.class)
+            )),
+           @ApiResponse(description = "Business and Internal problems", responseCode = "500", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Business and Internal problems\",\"status\":500}")
+           )),
+            @ApiResponse(description = "Authenticate error", responseCode = "401", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Authenticate error\",\"status\":401}")
+            ))
+    })
     @GetMapping(
             path = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -97,6 +113,20 @@ public class CreditCardController {
         return ResponseEntity.status(HttpStatus.OK.value()).body(response);
     }
 
+    @Operation(summary = "Update Credit Card Limit")
+    @ApiResponses(value = {
+            @ApiResponse(description = "Success", responseCode = "200"),
+            @ApiResponse(description = "Business and Internal problems", responseCode = "500", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Business and Internal problems\",\"status\":500}")
+            )),
+            @ApiResponse(description = "Authenticate error", responseCode = "401", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseError.class),
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Authenticate error\",\"status\":401}")
+            ))
+    })
     @PutMapping(
             path = "/limite",
             consumes = MediaType.APPLICATION_JSON_VALUE,

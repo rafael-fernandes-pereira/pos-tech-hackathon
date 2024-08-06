@@ -97,7 +97,7 @@ public class CustomerController {
     @GetMapping(
             path = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CustomerDataResponse> findByCpf(@RequestParam("cpf") String cpf){
+    ResponseEntity<CustomerDataResponse> findByCpf(@Parameter @RequestParam("cpf") String cpf){
 
         var customer = useCase.findByCpf(cpf);
 
@@ -138,7 +138,7 @@ public class CustomerController {
             path = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CustomerDataResponse> findById(@PathVariable String id){
+    ResponseEntity<CustomerDataResponse> findById(@Parameter @PathVariable String id){
 
         var customerIdModel = new Customer.CustomerId(id);
 
