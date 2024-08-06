@@ -3,13 +3,15 @@ package com.github.rafaelfernandes.creditcard.adapter.out.persistence;
 import com.github.rafaelfernandes.creditcard.application.model.CreditCard;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class CreditCardMapper {
 
-    public CreditCardJpaEntity toJpaEntity(CreditCard creditCard) {
+    public CreditCardJpaEntity toJpaEntity(CreditCard creditCard, UUID customerId) {
         return CreditCardJpaEntity.builder()
                 .document(creditCard.getCpf())
-                .customerId(creditCard.getCustomerId())
+                .customerId(customerId)
                 .expirationDate(creditCard.getDataValidade())
                 .number(creditCard.getNumero())
                 .cvv(creditCard.getCodigoSeguranca())

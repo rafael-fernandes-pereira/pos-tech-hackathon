@@ -102,6 +102,7 @@ public class CustomerController {
         var customer = useCase.findByCpf(cpf);
 
         var response = new CustomerDataResponse(
+                UUID.fromString(customer.getCustomerId().id()),
                 customer.getCpf(),
                 customer.getNome(),
                 customer.getEmail(),
@@ -144,6 +145,7 @@ public class CustomerController {
         var customer = useCase.findById(customerIdModel);
 
         var response = new CustomerDataResponse(
+                UUID.fromString(customer.getCustomerId().id()),
                 customer.getCpf(),
                 customer.getNome(),
                 customer.getEmail(),

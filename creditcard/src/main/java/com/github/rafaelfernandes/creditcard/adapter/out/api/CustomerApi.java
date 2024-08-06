@@ -5,6 +5,9 @@ import com.github.rafaelfernandes.creditcard.port.out.CustomerPort;
 import lombok.AllArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @ApiAdapter
 @AllArgsConstructor
 public class CustomerApi implements CustomerPort {
@@ -12,11 +15,14 @@ public class CustomerApi implements CustomerPort {
     private final RestTemplate restTemplate;
 
     @Override
-    public Boolean existsByCpf(String cpf) {
+    public Optional<UUID> findIdByCpf(String cpf) {
 
         var response = restTemplate.getForEntity("http://localhost:8081/cliente/?cpf={cpf}", CustomerDataResponse.class, cpf);
 
-        return response.getStatusCode().is2xxSuccessful();
+        return Optional.ofNullable(response.getBody())
+                .map(CustomerDataResponse::id);
+
+
 
     }
 }

@@ -19,21 +19,21 @@ public class ManageCreditCardService implements ManageCreditCardUseCase {
     private final CustomerPort customerPort;
 
     @Override
-    public CreditCard.CreditCardId create(CreditCard customer) {
+    public CreditCard.CreditCardId create(CreditCard creditCard) {
 
-        var customerExists = customerPort.existsByCpf(customer.getCpf());
+        var customerId = customerPort.findIdByCpf(creditCard.getCpf());
 
-        if (customerExists == Boolean.FALSE) throw new CustomerNotFoundException();
+        if (customerId.isEmpty()) throw new CustomerNotFoundException();
 
-        var creditCardExists = manageCreditCardPort.existsByCpfAndNumber(customer.getCpf(), customer.getNumero());
+        var creditCardExists = manageCreditCardPort.existsByCpfAndNumber(creditCard.getCpf(), creditCard.getNumero());
 
         if (Boolean.TRUE.equals(creditCardExists)) throw new NumberCreditCardForCpfExistsException();
 
-        var size = manageCreditCardPort.sizeByCPF(customer.getCpf());
+        var size = manageCreditCardPort.sizeByCPF(creditCard.getCpf());
 
         if (size == 2) throw new NumberCreditCardByCpfException();
 
-        var created = manageCreditCardPort.save(customer);
+        var created = manageCreditCardPort.save(creditCard, customerId.get());
 
         return created.getCreditCardId();
     }

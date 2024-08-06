@@ -87,6 +87,7 @@ public class CreditCardController {
         var response = new CreditCardDataResponse(
                 UUID.fromString(creditCard.getCreditCardId().id()),
                 creditCard.getCpf(),
+                creditCard.getCustomerId(),
                 creditCard.getNumero(),
                 creditCard.getDataValidade(),
                 creditCard.getCodigoSeguranca(),

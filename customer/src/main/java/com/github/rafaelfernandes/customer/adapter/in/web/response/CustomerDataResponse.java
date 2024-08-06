@@ -3,7 +3,12 @@ package com.github.rafaelfernandes.customer.adapter.in.web.response;
 import com.github.rafaelfernandes.customer.common.enums.State;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.UUID;
+
 public record CustomerDataResponse(
+
+        @Schema(implementation = UUID.class)
+        UUID id,
 
         @Schema(minimum = "11", maximum = "14")
         String cpf,

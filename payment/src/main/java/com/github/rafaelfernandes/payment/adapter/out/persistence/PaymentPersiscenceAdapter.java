@@ -29,6 +29,14 @@ public class PaymentPersiscenceAdapter implements ManagePaymentPort {
 
     @Override
     public List<Payment> findByCustomerId(UUID customerId) {
-        return Collections.emptyList();
+
+        var payments = paymentRepository.findByCustomerId(customerId);
+
+        if (payments.isEmpty()) return Collections.emptyList();
+
+        return payments.stream()
+                .map(paymentMapper::toDomain)
+                .toList();
+
     }
 }

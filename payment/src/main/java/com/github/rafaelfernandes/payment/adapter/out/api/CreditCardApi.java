@@ -24,7 +24,7 @@ public class CreditCardApi implements CreditCardPort {
         var creditCard = CreditCard.of(
                 response.getBody().id().toString(),
                 response.getBody().cpf(),
-                response.getBody().id(),
+                response.getBody().customerId(),
                 response.getBody().numero(),
                 response.getBody().data_validade(),
                 response.getBody().cvv(),

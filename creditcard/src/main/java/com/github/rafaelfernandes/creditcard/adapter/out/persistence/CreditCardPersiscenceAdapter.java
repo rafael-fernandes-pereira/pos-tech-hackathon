@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
 
 @PersistenceAdapter
 @AllArgsConstructor
@@ -26,9 +27,9 @@ public class CreditCardPersiscenceAdapter implements ManageCreditCardPort {
     }
 
     @Override
-    public CreditCard save(CreditCard creditCard) {
+    public CreditCard save(CreditCard creditCard, UUID customerId) {
 
-        var creditCardJpaEntity = creditCardMapper.toJpaEntity(creditCard);
+        var creditCardJpaEntity = creditCardMapper.toJpaEntity(creditCard, customerId);
 
         var saved = creditCardRepository.save(creditCardJpaEntity);
 

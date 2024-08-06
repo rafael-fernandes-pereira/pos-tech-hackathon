@@ -45,6 +45,6 @@ public class ManagePaymentService implements ManagePaymentUseCase {
 
     @Override
     public List<Payment> findByCustomerId(UUID customerId) {
-        return Collections.emptyList();
+        return managePaymentPort.findByCustomerId(customerId);
     }
 }
