@@ -85,6 +85,7 @@ public class CreditCardController {
         var creditCard = useCase.findCreditCardByCpfAndNumber(cpf, numero);
 
         var response = new CreditCardDataResponse(
+                UUID.fromString(creditCard.getCreditCardId().id()),
                 creditCard.getCpf(),
                 creditCard.getNumero(),
                 creditCard.getDataValidade(),

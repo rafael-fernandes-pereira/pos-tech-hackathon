@@ -1,7 +1,6 @@
-package com.github.rafaelfernandes.creditcard.adapter.in.web.response;
+package com.github.rafaelfernandes.payment.adapter.out.api;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.UUID;
 
 public record CreditCardDataResponse(

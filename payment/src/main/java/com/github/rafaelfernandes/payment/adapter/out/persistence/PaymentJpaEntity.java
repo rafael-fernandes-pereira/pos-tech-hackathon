@@ -1,4 +1,4 @@
-package com.github.rafaelfernandes.creditcard.adapter.out.persistence;
+package com.github.rafaelfernandes.payment.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,12 +14,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
-        name = "tbl_credit_card",
+        name = "tbl_payment",
         indexes = {
-                @Index(name = "idx_credit_card_document", columnList = "document")
+                @Index(name = "idx_payment", columnList = "customer_id")
         }
 )
-public class CreditCardJpaEntity {
+
+public class PaymentJpaEntity {
 
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
@@ -28,14 +29,14 @@ public class CreditCardJpaEntity {
 
     private UUID customerId;
 
-    private String document;
+    private UUID creditCardId;
 
-    private String number;
+    private String description;
 
-    private String cvv;
+    private String paymentMethod;
 
-    private String expirationDate;
+    private String status;
 
-    private BigDecimal limitValue;
+    private BigDecimal value;
 
 }

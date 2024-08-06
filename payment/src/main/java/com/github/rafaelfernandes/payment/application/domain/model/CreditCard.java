@@ -1,6 +1,7 @@
-package com.github.rafaelfernandes.creditcard.application.model;
+package com.github.rafaelfernandes.payment.application.domain.model;
 
-import com.github.rafaelfernandes.creditcard.common.validation.CreditCardExpirationDate;
+
+import com.github.rafaelfernandes.payment.common.validation.CreditCardExpirationDate;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -12,16 +13,16 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.UUID;
 
-import static com.github.rafaelfernandes.creditcard.common.validation.Validation.validate;
+import static com.github.rafaelfernandes.payment.common.validation.Validation.validate;
+
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreditCard {
 
-    private final CreditCardId creditCardId;
+    private CreditCardId creditCardId;
 
     @NotNull(message = "CPF deve ser preenchido")
     @Size(min = 11, max = 14, message = "CPF deve conter 11 caracteres (sem pontuacao) e 14 (com pontuação)")
@@ -45,8 +46,6 @@ public class CreditCard {
     @Positive(message = "Código de segurança do cartão deve ser positivo")
     private String codigoSeguranca;
 
-    @NotNull(message = "Limite do cartão deve ser preenchido")
-    @Positive(message = "Limite do cartão deve ser positivo")
     private BigDecimal limite;
 
     public static CreditCard of(String creditCardId, String cpf, UUID customerId, String number, String expirationDate, String cvv, BigDecimal limit) {
@@ -66,15 +65,12 @@ public class CreditCard {
         }
     }
 
-    public CreditCard(String cpf, String numero, String dataValidade, String codigoSeguranca, BigDecimal limite) {
+    public CreditCard(String cpf, String numero, String dataValidade, String codigoSeguranca) {
         this.cpf = cpf;
         this.numero = numero;
         this.dataValidade = dataValidade;
         this.codigoSeguranca = codigoSeguranca;
-        this.limite = limite;
         validate(this);
-
-        this.creditCardId = new CreditCardId(UUID.randomUUID().toString());
 
     }
 

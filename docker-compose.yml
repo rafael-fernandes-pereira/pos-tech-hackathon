@@ -24,17 +24,23 @@ services:
     ports:
       - "5434:5432"
 
-  customer-service:
-    build: ./customer
-    container_name: customer_service
+  payment-db:
+    <<: *database
+    container_name: payment_db
     ports:
-      - "8081:8081"
-    depends_on:
-      - customer-db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/mydatabase
-      SPRING_DATASOURCE_USERNAME: myuser
-      SPRING_DATASOURCE_PASSWORD: mypassword
+      - "5435:5432"
+
+#  customer-service:
+#    build: ./customer
+#    container_name: customer_service
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - customer-db
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/mydatabase
+#      SPRING_DATASOURCE_USERNAME: myuser
+#      SPRING_DATASOURCE_PASSWORD: mypassword
 
 
 
