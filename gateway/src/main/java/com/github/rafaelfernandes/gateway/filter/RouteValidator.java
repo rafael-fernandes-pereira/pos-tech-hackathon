@@ -11,33 +11,10 @@ import java.util.function.Predicate;
 @Component
 public class RouteValidator {
 
-    public String getRequiredRole(ServerHttpRequest request) {
-        var path = request.getPath().toString();
-
-        if (path.startsWith("/products")) {
-            switch (request.getMethod().name()) {
-                case "POST":
-                    return "ADMINISTRATOR";
-                case "PUT":
-                case "DELETE":
-                    if (path.matches("/products/\\s+")) {
-                        return "ADMINISTRATOR";
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        return null;
-    }
-
     public static final List<String> openApiEndpoints = List.of(
             "/login/authenticate",
             "/login/validate",
-            "/users/\\s+",
-            "/eureka",
-            "/users/v2/api-docs"
+            "/eureka"
     );
 
     public Predicate<ServerHttpRequest> isSecured =

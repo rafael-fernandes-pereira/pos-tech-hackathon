@@ -1,74 +1,61 @@
 package com.github.rafaelfernandes.gateway.filter;
 
-import com.github.rafaelfernandes.gateway.service.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.rafaelfernandes.gateway.service.ValidateTokenService;
+import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import com.github.rafaelfernandes.gateway.exception.UnauthorizedException;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @Component
-public class AuthenticatorFilter extends AbstractGatewayFilterFactory<AuthenticatorFilter.Config> {
+@AllArgsConstructor
+public class AuthenticatorFilter implements GatewayFilter  {
 
-    @Autowired
-    private RouteValidator routeValidator;
+    private final RouteValidator routeValidator;
 
-    @Autowired
-    private JwtService jwtService;
-
-    public AuthenticatorFilter() {
-        super(Config.class);
-
-    }
+    private final ValidateTokenService validateToken;
 
     @Override
-    public GatewayFilter apply(Config config) {
-        return ((exchange, chain) -> {
-            ServerHttpRequest request = null;
-            if (routeValidator.isSecured.test(exchange.getRequest())) {
-                if (!exchange.getRequest().getHeaders().containsKey("Authorization")) {
-                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return exchange.getResponse().setComplete();
-                }
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
 
-                String token = exchange.getRequest().getHeaders().get("Authorization").get(0);
-
-                if (token != null && token.startsWith("Bearer ")) {
-                    token = token.substring(7);
-                }
-
-                try {
-                    jwtService.validateToken(token);
-
-                    var role = jwtService.extractRole(token);
-
-                    if (role.equals("CUSTOMER")) {
-                        var userId = jwtService.extractUserId(token);
-                        request = exchange.getRequest()
-                                .mutate()
-                                .header("userId", userId.toString())
-                                .build();
-                    }
-
-                    String requiredRole = routeValidator.getRequiredRole(exchange.getRequest());
-
-                    if (requiredRole != null && !requiredRole.equals(role)) {
-                        throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
-                    }
-
-                } catch (Exception e) {
-                    System.out.println("Error in AuthenticationFilter: " + e.getMessage());
-                    throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
-                }
+        if (routeValidator.isSecured.test(request)) {
+            if (isAuthMissing(request)) {
+                return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-            return chain.filter(exchange.mutate().request(request).build());
-        });
+
+            var token = getAuthHeader(request);
+
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            if (!validateToken.validate(token)) {
+                return this.onError(exchange, HttpStatus.FORBIDDEN);
+            }
+        }
+
+        return chain.filter(exchange);
+
+
     }
 
-    public static class Config {
+    private boolean isAuthMissing(ServerHttpRequest request) {
+        return !request.getHeaders().containsKey("Authorization");
+    }
 
+    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(httpStatus);
+        return response.setComplete();
+    }
+
+    private String getAuthHeader(ServerHttpRequest request) {
+        return request.getHeaders().getOrEmpty("Authorization").get(0);
     }
 
 }

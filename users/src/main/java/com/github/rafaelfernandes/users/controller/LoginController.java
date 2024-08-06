@@ -29,9 +29,14 @@ public class LoginController {
         return ResponseEntity.ok(token);
     }
 
-    @GetMapping("/validate")
+    @PostMapping("/validate")
     public ResponseEntity<String> validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        service.validate(token);
+        try{
+            service.validate(token);
+        } catch (Exception e){
+            return ResponseEntity.status(401).body("Invalid token");
+        }
+
         return ResponseEntity.ok("validated");
     }
 

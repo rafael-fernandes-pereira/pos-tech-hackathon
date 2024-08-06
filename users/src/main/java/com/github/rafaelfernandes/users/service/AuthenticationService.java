@@ -55,7 +55,9 @@ public class AuthenticationService {
     }
 
     public void validate(String token){
-        jwtService.validateToken(token);
+        if (jwtService.isInvalid(token)){
+            throw new UnauthorizedException(401, "Invalid token");
+        }
     }
 
 
