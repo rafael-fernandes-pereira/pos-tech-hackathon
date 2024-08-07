@@ -1,9 +1,13 @@
 package com.github.rafaelfernandes.gateway.filter;
 
+import com.github.rafaelfernandes.gateway.exception.UnauthorizedException;
 import com.github.rafaelfernandes.gateway.service.ValidateTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -12,50 +16,52 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-@AllArgsConstructor
-public class AuthenticatorFilter implements GatewayFilter  {
+public class AuthenticatorFilter extends AbstractGatewayFilterFactory<AuthenticatorFilter.Config> {
 
-    private final RouteValidator routeValidator;
+    @Autowired
+    private RouteValidator routeValidator;
 
-    private final ValidateTokenService validateToken;
+    @Autowired
+    private ValidateTokenService validateToken;
+
+    public AuthenticatorFilter() {
+        super(Config.class);
+
+    }
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
+    public GatewayFilter apply(Config config) {
+        return ((exchange, chain) -> {
+            ServerHttpRequest request = null;
+            if (routeValidator.isSecured.test(exchange.getRequest())) {
+                if (!exchange.getRequest().getHeaders().containsKey("Authorization")) {
+                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return exchange.getResponse().setComplete();
+                }
 
-        if (routeValidator.isSecured.test(request)) {
-            if (isAuthMissing(request)) {
-                return onError(exchange, HttpStatus.UNAUTHORIZED);
+                String token = exchange.getRequest().getHeaders().get("Authorization").get(0);
+
+                if (token != null && token.startsWith("Bearer ")) {
+                    token = token.substring(7);
+                }
+
+                try {
+
+                    if (!validateToken.validate(token)){
+                        throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Error in AuthenticationFilter: " + e.getMessage());
+                    throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+                }
             }
-
-            var token = getAuthHeader(request);
-
-            if (token != null && token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-
-            if (!validateToken.validate(token)) {
-                return this.onError(exchange, HttpStatus.FORBIDDEN);
-            }
-        }
-
-        return chain.filter(exchange);
-
-
+            return chain.filter(exchange.mutate().request(request).build());
+        });
     }
 
-    private boolean isAuthMissing(ServerHttpRequest request) {
-        return !request.getHeaders().containsKey("Authorization");
-    }
+    public static class Config {
 
-    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        return response.setComplete();
-    }
-
-    private String getAuthHeader(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0);
     }
 
 }

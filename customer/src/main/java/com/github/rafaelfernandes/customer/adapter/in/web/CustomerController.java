@@ -50,7 +50,7 @@ public class CustomerController {
             ))
     })
     @PostMapping(
-            path = "/",
+            path = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CustomerIdResponse> register(@Parameter @RequestBody CustomerRequest request){
 
@@ -95,7 +95,7 @@ public class CustomerController {
             ))
     })
     @GetMapping(
-            path = "/",
+            path = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CustomerDataResponse> findByCpf(@Parameter @RequestParam("cpf") String cpf){
 

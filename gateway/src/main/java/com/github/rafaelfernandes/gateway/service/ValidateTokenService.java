@@ -29,7 +29,7 @@ public class ValidateTokenService {
         HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                loginApi + "/validate",
+                loginApi + "/login/validacao",
                 HttpMethod.POST,
                 requestEntity,
                 String.class

@@ -16,24 +16,14 @@ spring:
             - Path=/api/validacao
           filters:
             - RewritePath=/api/validacao, /login/validacao
-#        - id: productRoute
-#          uri: lb://PRODUCT-API
-#          predicates:
-#            - Path=/products/**
-#          filters:
-#            - AuthenticatorFilter
-#        - id: cartRoute
-#          uri: lb://CART-API
-#          predicates:
-#            - Path=/cart/**
-#          filters:
-#            - AuthenticatorFilter
-#        - id: paymentRoute
-#          uri: lb://PAYMENT-API
-#          predicates:
-#            - Path=/payment/**
-#          filters:
-#            - AuthenticatorFilter
+        - id: cliente
+          uri: lb://CUSTOMER-API
+          predicates:
+            - Path=/api/cliente/**
+          filters:
+            - RewritePath=/api/cliente(?<segment>/?.*), /cliente$\{segment}
+            - AuthenticatorFilter
+
     discovery:
       locator:
         lower-case-service-id: true
@@ -59,4 +49,4 @@ management:
     enabled: false
 
 login:
-  api: lb://LOGIN-API
+  api: http://localhost:8081
