@@ -9,6 +9,6 @@ public interface ManagePaymentPort {
 
     Payment create(Payment payment);
 
-    List<Payment> findByCustomerId(UUID customerId);
+    List<Payment> findByCpf(String cpf);
 
 }

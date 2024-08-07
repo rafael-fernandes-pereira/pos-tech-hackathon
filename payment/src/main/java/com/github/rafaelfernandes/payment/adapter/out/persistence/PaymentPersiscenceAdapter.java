@@ -28,9 +28,9 @@ public class PaymentPersiscenceAdapter implements ManagePaymentPort {
     }
 
     @Override
-    public List<Payment> findByCustomerId(UUID customerId) {
+    public List<Payment> findByCpf(String cpf) {
 
-        var payments = paymentRepository.findByCustomerId(customerId);
+        var payments = paymentRepository.findByDocument(cpf);
 
         if (payments.isEmpty()) return Collections.emptyList();
 

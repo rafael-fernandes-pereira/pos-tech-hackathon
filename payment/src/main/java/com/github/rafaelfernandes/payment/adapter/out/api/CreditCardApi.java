@@ -4,20 +4,25 @@ import com.github.rafaelfernandes.payment.application.domain.model.CreditCard;
 import com.github.rafaelfernandes.payment.application.port.out.CreditCardPort;
 import com.github.rafaelfernandes.payment.common.annotations.ApiAdapter;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 @ApiAdapter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CreditCardApi implements CreditCardPort {
+
+    @Value("${creditcard.api}")
+    private String creditCardApi;
 
     private final RestTemplate restTemplate;
 
     @Override
     public Optional<CreditCard> findByCpfAndNumber(String cpf, String number) {
-        var response = restTemplate.getForEntity("http://localhost:8083/cartao/?cpf={cpf}&numero={numero}", CreditCardDataResponse.class, cpf, number);
+        var response = restTemplate.getForEntity(creditCardApi + "cartao?cpf={cpf}&numero={numero}", CreditCardDataResponse.class, cpf, number);
 
         if (response.getStatusCode().is4xxClientError()) return Optional.empty();
 
@@ -39,7 +44,7 @@ public class CreditCardApi implements CreditCardPort {
 
         var request = new CreditCardUpdateLimitRequest(creditCard.getCpf(), creditCard.getNumero(), value);
 
-        restTemplate.put("http://localhost:8083/cartao/limite", request);
+        restTemplate.put(creditCardApi+ "cartao/limite", request);
 
     }
 }

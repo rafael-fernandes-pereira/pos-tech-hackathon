@@ -31,6 +31,8 @@ public class PaymentJpaEntity {
 
     private UUID creditCardId;
 
+    private String document;
+
     private String description;
 
     private String paymentMethod;

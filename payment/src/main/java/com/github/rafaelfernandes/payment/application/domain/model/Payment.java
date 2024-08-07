@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -46,6 +47,11 @@ public class Payment {
     @ValueOfEnum(enumClass = Status.class, message = "Status inválido")
     private String status;
 
+    @NotNull(message = "CPF deve ser preenchido")
+    @Size(min = 11, max = 14, message = "CPF deve conter 11 caracteres (sem pontuacao) e 14 (com pontuação)")
+    @CPF(message = "CPF inválido")
+    private String cpf;
+
     public record PaymentId(
             @NotEmpty(message = "O campo deve ser do tipo UUID")
             @org.hibernate.validator.constraints.UUID(message = "O campo deve ser do tipo UUID")
@@ -58,8 +64,8 @@ public class Payment {
         }
     }
 
-    public static Payment of(UUID paymentId, UUID customerId, UUID creditCardId, String paymentMethod, String description, BigDecimal value, String status) {
-        return new Payment(new PaymentId(paymentId.toString()), customerId.toString(), creditCardId.toString(), paymentMethod, description, value, status);
+    public static Payment of(UUID paymentId, UUID customerId, UUID creditCardId, String paymentMethod, String description, BigDecimal value, String status, String cpf) {
+        return new Payment(new PaymentId(paymentId.toString()), customerId.toString(), creditCardId.toString(), paymentMethod, description, value, status, cpf);
     }
 
     public static Payment from(CreditCard creditCard, String description, BigDecimal value, Status status) {
@@ -70,12 +76,13 @@ public class Payment {
                 PaymentMethod.CARTAO_CREDITO.name(),
                 description,
                 value,
-                status.name()
+                status.name(),
+                creditCard.getCpf()
         );
 
     }
 
-    public Payment(UUID customerId, UUID creditCardId, String paymentMethod, String description, BigDecimal value, String status) {
+    public Payment(UUID customerId, UUID creditCardId, String paymentMethod, String description, BigDecimal value, String status, String cpf) {
 
         this.customerId = customerId.toString();
         this.creditCardId = creditCardId.toString();
@@ -83,6 +90,7 @@ public class Payment {
         this.description = description;
         this.value = value;
         this.status = status;
+        this.cpf = cpf;
         validate(this);
         this.paymentId = new PaymentId(UUID.randomUUID().toString());
 

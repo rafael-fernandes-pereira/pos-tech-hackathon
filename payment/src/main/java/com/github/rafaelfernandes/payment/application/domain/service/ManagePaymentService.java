@@ -44,7 +44,7 @@ public class ManagePaymentService implements ManagePaymentUseCase {
     }
 
     @Override
-    public List<Payment> findByCustomerId(UUID customerId) {
-        return managePaymentPort.findByCustomerId(customerId);
+    public List<Payment> findByCpf(String cpf) {
+        return managePaymentPort.findByCpf(cpf);
     }
 }

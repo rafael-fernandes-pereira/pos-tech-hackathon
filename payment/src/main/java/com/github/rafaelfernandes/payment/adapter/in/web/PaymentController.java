@@ -54,7 +54,7 @@ public class PaymentController {
             ))
     })
     @PostMapping(
-            path = "/",
+            path = "",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaymentIdResponse> create(@RequestBody PaymentRequest paymentRequest) {
@@ -89,10 +89,10 @@ public class PaymentController {
                     examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"message\":\"Authenticate error\",\"status\":401}")
             ))
     })
-    @GetMapping(path = "/cliente/{customerId}")
-    public ResponseEntity<List<PaymentDataResponse>> findByCustomerId(@PathVariable String customerId) {
+    @GetMapping(path = "/cliente/{cpf}")
+    public ResponseEntity<List<PaymentDataResponse>> findByCustomerId(@PathVariable String cpf) {
 
-        var payments = useCase.findByCustomerId(UUID.fromString(customerId));
+        var payments = useCase.findByCpf(cpf);
 
         var response = payments.stream()
                 .map(payment -> new PaymentDataResponse(

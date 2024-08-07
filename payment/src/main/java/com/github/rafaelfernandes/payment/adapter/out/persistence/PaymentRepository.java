@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface PaymentRepository extends JpaRepository<PaymentJpaEntity, UUID> {
 
-    List<PaymentJpaEntity> findByCustomerId(UUID customerId);
+    List<PaymentJpaEntity> findByDocument(String document);
 
 }

@@ -17,6 +17,7 @@ public class PaymentMapper {
         paymentJpaEntity.setDescription(payment.getDescription());
         paymentJpaEntity.setCreditCardId(UUID.fromString(payment.getCreditCardId()));
         paymentJpaEntity.setValue(payment.getValue());
+        paymentJpaEntity.setDocument(payment.getCpf());
 
         return paymentJpaEntity;
     }
@@ -30,7 +31,8 @@ public class PaymentMapper {
                 paymentJpaEntity.getPaymentMethod(),
                 paymentJpaEntity.getDescription(),
                 paymentJpaEntity.getValue(),
-                paymentJpaEntity.getStatus()
+                paymentJpaEntity.getStatus(),
+                paymentJpaEntity.getDocument()
         );
 
     }

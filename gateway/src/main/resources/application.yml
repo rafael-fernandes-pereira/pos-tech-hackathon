@@ -30,6 +30,13 @@ spring:
           filters:
             - RewritePath=/api/cartao(?<segment>/?.*), /cartao$\{segment}
             - AuthenticatorFilter
+        - id: pagamento
+          uri: lb://PAYMENT-API
+          predicates:
+            - Path=/api/pagamentos/**
+          filters:
+            - RewritePath=/api/pagamentos(?<segment>/?.*), /pagamentos$\{segment}
+            - AuthenticatorFilter
 
     discovery:
       locator:
