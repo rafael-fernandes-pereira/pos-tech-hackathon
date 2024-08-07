@@ -30,15 +30,15 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.username(),
-                            request.password()
+                            request.usuario(),
+                            request.senha()
                     )
             );
         } catch (BadCredentialsException e) {
             throw new UnauthorizedException(403, "Invalid username or password");
         }
 
-        var user = respository.findFirstByUsername(request.username());
+        var user = respository.findFirstByUsername(request.usuario());
 
         if (!user.isPresent()){
 

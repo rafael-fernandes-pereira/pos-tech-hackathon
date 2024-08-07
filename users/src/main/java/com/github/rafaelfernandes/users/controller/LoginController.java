@@ -21,7 +21,7 @@ public class LoginController {
 
     private final AuthenticationService service;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/autenticacao")
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request){
 
         var token = service.authenticate(request);
@@ -29,7 +29,7 @@ public class LoginController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/validate")
+    @PostMapping("/validacao")
     public ResponseEntity<String> validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         try{
             service.validate(token);

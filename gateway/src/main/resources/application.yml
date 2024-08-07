@@ -4,10 +4,18 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: userLoginRoute
+        - id: autenticacao
           uri: lb://LOGIN-API
           predicates:
-            - Path=/login/**
+            - Path=/api/autenticacao
+          filters:
+            - RewritePath=/api/autenticacao, /login/autenticacao
+        - id: validacao
+          uri: lb://LOGIN-API
+          predicates:
+            - Path=/api/validacao
+          filters:
+            - RewritePath=/api/validacao, /login/validacao
 #        - id: productRoute
 #          uri: lb://PRODUCT-API
 #          predicates:
