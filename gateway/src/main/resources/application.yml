@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: userLoginRoute
+          uri: lb://LOGIN-API
+          predicates:
+            - Path=/login/**
+#        - id: productRoute
+#          uri: lb://PRODUCT-API
+#          predicates:
+#            - Path=/products/**
+#          filters:
+#            - AuthenticatorFilter
+#        - id: cartRoute
+#          uri: lb://CART-API
+#          predicates:
+#            - Path=/cart/**
+#          filters:
+#            - AuthenticatorFilter
+#        - id: paymentRoute
+#          uri: lb://PAYMENT-API
+#          predicates:
+#            - Path=/payment/**
+#          filters:
+#            - AuthenticatorFilter
+    discovery:
+      locator:
+        lower-case-service-id: true
+
+server:
+  port: 8888
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  security:
+    enabled: false
+
+login:
+  api: lb://LOGIN-API

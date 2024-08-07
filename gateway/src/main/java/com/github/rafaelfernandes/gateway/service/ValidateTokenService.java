@@ -2,6 +2,7 @@ package com.github.rafaelfernandes.gateway.service;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-@AllArgsConstructor
 public class ValidateTokenService {
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Value("${login.api}")
     private String loginApi;
@@ -23,8 +24,9 @@ public class ValidateTokenService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
+        headers.set("Authorization", token);
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(token, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
                 loginApi + "/validate",
