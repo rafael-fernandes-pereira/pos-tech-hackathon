@@ -23,6 +23,13 @@ spring:
           filters:
             - RewritePath=/api/cliente(?<segment>/?.*), /cliente$\{segment}
             - AuthenticatorFilter
+        - id: cartao
+          uri: lb://CREDITCARD-API
+          predicates:
+            - Path=/api/cartao/**
+          filters:
+            - RewritePath=/api/cartao(?<segment>/?.*), /cartao$\{segment}
+            - AuthenticatorFilter
 
     discovery:
       locator:

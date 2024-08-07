@@ -55,7 +55,7 @@ public class CreditCardController {
             ))
     })
     @PostMapping(
-            path = "/",
+            path = "",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CreditCardIdResponse> register(@Parameter @RequestBody CreditCardRequest request){
@@ -94,7 +94,7 @@ public class CreditCardController {
             ))
     })
     @GetMapping(
-            path = "/",
+            path = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CreditCardDataResponse> getCreditCard(@RequestParam("cpf") String cpf, @RequestParam("numero") String numero){
 
