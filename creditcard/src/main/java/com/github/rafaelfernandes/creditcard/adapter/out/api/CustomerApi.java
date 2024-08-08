@@ -21,7 +21,7 @@ public class CustomerApi implements CustomerPort {
     @Override
     public Optional<UUID> findIdByCpf(String cpf) {
 
-        var response = restTemplate.getForEntity(customerApi + "/cliente?cpf={cpf}", CustomerDataResponse.class, cpf);
+        var response = restTemplate.getForEntity(customerApi + "/api/cliente?cpf={cpf}", CustomerDataResponse.class, cpf);
 
         return Optional.ofNullable(response.getBody())
                 .map(CustomerDataResponse::id);

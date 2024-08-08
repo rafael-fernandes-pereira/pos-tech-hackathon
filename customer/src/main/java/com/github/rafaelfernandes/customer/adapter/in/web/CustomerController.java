@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @WebAdapter
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/api/cliente")
 @AllArgsConstructor
 @Tag(name = "01 - Customer", description = "Customer Endpoint")
 public class CustomerController {

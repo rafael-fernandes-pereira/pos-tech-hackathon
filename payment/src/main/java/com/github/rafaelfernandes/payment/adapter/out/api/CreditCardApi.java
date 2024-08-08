@@ -22,7 +22,7 @@ public class CreditCardApi implements CreditCardPort {
 
     @Override
     public Optional<CreditCard> findByCpfAndNumber(String cpf, String number) {
-        var response = restTemplate.getForEntity(creditCardApi + "/cartao?cpf={cpf}&numero={numero}", CreditCardDataResponse.class, cpf, number);
+        var response = restTemplate.getForEntity(creditCardApi + "/api/cartao?cpf={cpf}&numero={numero}", CreditCardDataResponse.class, cpf, number);
 
         if (response.getStatusCode().is4xxClientError()) return Optional.empty();
 
@@ -44,7 +44,7 @@ public class CreditCardApi implements CreditCardPort {
 
         var request = new CreditCardUpdateLimitRequest(creditCard.getCpf(), creditCard.getNumero(), value);
 
-        restTemplate.put(creditCardApi+ "/cartao/limite", request);
+        restTemplate.put(creditCardApi+ "/api/cartao/limite", request);
 
     }
 }

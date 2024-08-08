@@ -25,10 +25,10 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/login/autenticacao").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login/validacao").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/autenticacao").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/validacao").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/login-api/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/login-api/v3/api-docs/**").permitAll()
                 )
                 .build();
     }

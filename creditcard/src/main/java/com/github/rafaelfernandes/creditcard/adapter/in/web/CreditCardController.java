@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @WebAdapter
 @RestController
-@RequestMapping("/cartao")
+@RequestMapping("/api/cartao")
 @AllArgsConstructor
 @Tag(name = "02 - Credit Card", description = "Credit Card Endpoint")
 public class CreditCardController {

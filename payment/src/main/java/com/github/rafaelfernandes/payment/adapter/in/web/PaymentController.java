@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @WebAdapter
 @RestController
-@RequestMapping("/pagamentos")
+@RequestMapping("/api/pagamentos")
 @AllArgsConstructor
 @Tag(name = "03 - Payment", description = "Payment Endpoint")
 public class PaymentController {

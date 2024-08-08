@@ -15,13 +15,12 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/login")
 @AllArgsConstructor
 public class LoginController {
 
     private final AuthenticationService service;
 
-    @PostMapping("/autenticacao")
+    @PostMapping("/api/autenticacao")
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request){
 
         var token = service.authenticate(request);
@@ -29,7 +28,7 @@ public class LoginController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/validacao")
+    @PostMapping("/api/validacao")
     public ResponseEntity<String> validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         try{
             service.validate(token);

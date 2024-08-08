@@ -8,8 +8,6 @@ spring:
           uri: lb://LOGIN-API
           predicates:
             - Path=/api/autenticacao
-          filters:
-            - RewritePath=/api/autenticacao, /login/autenticacao
         - id: validacao
           uri: lb://LOGIN-API
           predicates:
@@ -21,29 +19,50 @@ spring:
           predicates:
             - Path=/api/cliente/**
           filters:
-            - RewritePath=/api/cliente(?<segment>/?.*), /cliente$\{segment}
             - AuthenticatorFilter
         - id: cartao
           uri: lb://CREDITCARD-API
           predicates:
             - Path=/api/cartao/**
           filters:
-            - RewritePath=/api/cartao(?<segment>/?.*), /cartao$\{segment}
             - AuthenticatorFilter
         - id: pagamento
           uri: lb://PAYMENT-API
           predicates:
             - Path=/api/pagamentos/**
           filters:
-            - RewritePath=/api/pagamentos(?<segment>/?.*), /pagamentos$\{segment}
             - AuthenticatorFilter
+        - id: login-swagger
+          uri: lb://LOGIN-API
+          predicates:
+            - Path=/login-api/v3/api-docs
+          filters:
+            - StripPrefix=1
+        - id: cliente-swagger
+          uri: lb://CUSTOMER-API
+          predicates:
+            - Path=/customer-api/v3/api-docs
+          filters:
+            - StripPrefix=1
+        - id: cartao-swagger
+          uri: lb://CREDITCARD-API
+          predicates:
+            - Path=/credit-card-api/v3/api-docs
+          filters:
+            - StripPrefix=1
+        - id: pagamento-swagger
+          uri: lb://PAYMENT-API
+          predicates:
+            - Path=/payment-api/v3/api-docs
+          filters:
+            - StripPrefix=1
 
     discovery:
       locator:
         lower-case-service-id: true
 
 server:
-  port: 8888
+  port: 8080
 
 eureka:
   client:
@@ -62,3 +81,26 @@ management:
 
 login:
   api: ${LOGIN_API}
+
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /login-api/v3/api-docs
+        name: Login API Service
+        primaryName: Login API Service
+      - url: /customer-api/v3/api-docs
+        name: Customer API Service
+        primaryName: Customer API Service
+      - url: /credit-card-api/v3/api-docs
+        name: Credit Card API Service
+        primaryName: Credit Card API Service
+      - url: /payment-api/v3/api-docs
+        name: Payment API Service
+        primaryName: Payment API Service
