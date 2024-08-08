@@ -31,6 +31,10 @@ public class ManagePaymentService implements ManagePaymentUseCase {
 
         if (creditCardFound.isEmpty()) throw new CreditCardNotFoundException();
 
+        if (!creditCardFound.get().getCodigoSeguranca().equals(creditCard.getCodigoSeguranca()))  throw new CreditCardNotFoundException();
+
+        if (!creditCardFound.get().getDataValidade().equals(creditCard.getDataValidade()))  throw new CreditCardNotFoundException();
+
         if (creditCardFound.get().getLimite().compareTo(value) < 0) throw new CreditCardLimiteExceededFoundException();
 
         var payment = Payment.from(creditCardFound.get(), description, value, Status.APROVADO);

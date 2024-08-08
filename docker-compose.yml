@@ -5,8 +5,6 @@ services:
   login-db: &database
     image: postgres:latest
     container_name: login_db
-    ports:
-      - "5433:5432"
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
@@ -15,33 +13,89 @@ services:
   customer-db:
     <<: *database
     container_name: customer_db
-    ports:
-      - "5432:5432"
 
   credit-card-db:
     <<: *database
     container_name: credit_card_db
-    ports:
-      - "5434:5432"
 
   payment-db:
     <<: *database
     container_name: payment_db
+
+  eureka-service:
+    build: ./eureka
+    container_name: eureka_service
+
+  login-service:
+    build: ./users
+    container_name: login_service
+    depends_on:
+      - login-db
+      - eureka-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://login-db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      EUREKA_SERVICE: http://eureka-service:8761/eureka
+
+  customer-service:
+    build: ./customer
+    container_name: customer_service
+    depends_on:
+      - customer-db
+      - eureka-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      EUREKA_SERVICE: http://eureka-service:8761/eureka
+
+  credit-card-service:
+    build: ./creditcard
+    container_name: credit_card_service
+    depends_on:
+      - credit-card-db
+      - customer-service
+      - eureka-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://credit-card-db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      EUREKA_SERVICE: http://eureka-service:8761/eureka
+      CUSTOMER_API: http://customer-service:8080
+
+  payment-service:
+    build: ./payment
+    container_name: payment_service
+    depends_on:
+      - payment-db
+      - credit-card-service
+      - eureka-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://payment-db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      EUREKA_SERVICE: http://eureka-service:8761/eureka
+      CREDIT_CARD_API: http://credit-card-service:8080
+
+
+  gateway-service:
+    build: ./gateway
+    container_name: gateway_service
+    depends_on:
+      - eureka-service
+      - customer-service
+      - credit-card-service
+      - login-service
+    environment:
+      LOGIN_API: http://login-service:8080
+      EUREKA_SERVICE: http://eureka-service:8761/eureka
     ports:
-      - "5435:5432"
-
-#  customer-service:
-#    build: ./customer
-#    container_name: customer_service
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - customer-db
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/mydatabase
-#      SPRING_DATASOURCE_USERNAME: myuser
-#      SPRING_DATASOURCE_PASSWORD: mypassword
+      - 8080:8888
 
 
 
+networks:
+  eureka-network:
+    driver: bridge
 

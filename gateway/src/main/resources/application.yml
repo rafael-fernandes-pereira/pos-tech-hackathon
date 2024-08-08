@@ -50,9 +50,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    hostname: localhost
+      defaultZone: ${EUREKA_SERVICE}
 
 management:
   endpoints:
@@ -63,4 +61,4 @@ management:
     enabled: false
 
 login:
-  api: http://localhost:8081
+  api: ${LOGIN_API}
