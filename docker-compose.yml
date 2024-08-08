@@ -5,8 +5,6 @@ services:
   login-db: &database
     image: postgres:latest
     container_name: login_db
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
@@ -15,20 +13,14 @@ services:
   customer-db:
     <<: *database
     container_name: customer_db
-    ports:
-      - 5433:5432
 
   credit-card-db:
     <<: *database
     container_name: credit_card_db
-    ports:
-      - 5434:5432
 
   payment-db:
     <<: *database
     container_name: payment_db
-    ports:
-      - 5435:5432
 
   eureka-service:
     build: ./eureka
